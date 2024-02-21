@@ -17,7 +17,6 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id", name = "category_id")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> events;
 }

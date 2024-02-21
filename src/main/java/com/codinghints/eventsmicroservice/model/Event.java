@@ -28,15 +28,16 @@ public class Event {
     private String url;
     private Boolean isFree;
 
-    @OneToMany( cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private List<Order> orders;
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    private User host;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User user;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
     private Date createdAt;
     private Date updatedAt;

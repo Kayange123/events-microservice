@@ -14,20 +14,18 @@ import java.util.UUID;
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String clerkId;
+    @Column(updatable = false, unique = true)
+    private String externalId;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String username;
     private String firstName;
     private String lastName;
     private String imageUrl;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id", name = "host_id")
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> events;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id", name = "buyer_id")
-    private List<Order> orders;
 
     @CreatedDate
     private Date createdAt;
