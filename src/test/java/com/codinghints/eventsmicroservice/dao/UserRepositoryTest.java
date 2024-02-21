@@ -1,5 +1,6 @@
 package com.codinghints.eventsmicroservice.dao;
 
+import com.codinghints.eventsmicroservice.dto.UserRequestDTO;
 import com.codinghints.eventsmicroservice.model.Event;
 import com.codinghints.eventsmicroservice.model.User;
 import org.junit.jupiter.api.Test;
@@ -7,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserRepositoryTest {
@@ -24,7 +23,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    public void saveUser(){
+    public void saveUser(UserRequestDTO userRequestDTO){
         Event event = Event.builder()
                 .isFree(true)
                 .title("My first event")
@@ -41,6 +40,12 @@ class UserRepositoryTest {
                 .build();
 
         userRepository.save(user);
+    }
+
+    @Test
+    public void getUserByUsername(){
+        User user = userRepository.findByUsernameContainingIgnoreCase("maiko").orElse(null);
+        System.out.println("user = " + user);
     }
 
 }

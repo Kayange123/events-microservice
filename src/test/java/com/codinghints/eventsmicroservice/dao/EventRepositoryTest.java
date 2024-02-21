@@ -24,14 +24,15 @@ class EventRepositoryTest {
     @Test
     public void saveEvent(){
         Event event = Event.builder()
-                .description("Event description")
-                .price(BigDecimal.TEN)
+                .description("This Event's description")
+                .price(BigDecimal.valueOf(1000))
                 .title("Event title")
-                .imageUrl("http://mydemo.com/images")
-                .url("http://mydemo.com")
+                .imageUrl("hello image")
+                .url("http://everything.com")
                 .isFree(true)
                 .build();
         Event save = eventRepository.save(event);
+        System.out.println("save = " + save);
     }
 
     @Test
