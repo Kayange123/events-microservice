@@ -32,10 +32,10 @@ public class UserController {
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
     @GetMapping("/users")
-    public ResponseEntity<APIResponse<List<UserResponseDTO>>> getUsers(){
+    public ResponseEntity<APIResponse<List<UserResponseDTO>>> findAllUsers(){
         List<UserResponseDTO> users;
         try {
-            users = userService.getUsers();
+            users = userService.findAllUsers();
         }catch (Exception e){
             throw new EventServiceBusinessException("Error getting users");
         }

@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Cacheable(value = "user")
-    public List<UserResponseDTO> getUsers() throws EventServiceBusinessException{
+    public List<UserResponseDTO> findAllUsers() throws EventServiceBusinessException{
         try{
             log.info("UserService: getUsers -> Execution started");
             List<User> users = userRepository.findAll();
