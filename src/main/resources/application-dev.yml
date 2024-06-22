@@ -1,0 +1,9 @@
+ACTIVE_PROFILE: dev
+
+#Email
+EMAIL_HOST: smtp.gmail.com
+EMAIL_PORT: 587
+EMAIL_PASSWORD: password
+EMAIL_ID: kayangejr3@gmail.com
+
+VERIFY_EMAIL_HOST: http://localhost:8080

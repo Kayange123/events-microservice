@@ -1,66 +1,38 @@
 package com.codinghints.eventsmicroservice.api;
 
-import com.codinghints.eventsmicroservice.dto.APIResponse;
-import com.codinghints.eventsmicroservice.dto.UserRequestDTO;
-import com.codinghints.eventsmicroservice.dto.UserResponseDTO;
-import com.codinghints.eventsmicroservice.exception.EventServiceBusinessException;
+
+import com.codinghints.eventsmicroservice.dto.Response;
+import com.codinghints.eventsmicroservice.dto.UserRequest;
 import com.codinghints.eventsmicroservice.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.UUID;
+import java.net.URI;
 
-@RestController @Slf4j
-@RequestMapping("/api/v1")
-@AllArgsConstructor
+import static com.codinghints.eventsmicroservice.utils.RequestUtils.getResponse;
+import static java.util.Collections.emptyMap;
+
+@RestController
+@RequestMapping("/api/v1/user")
+@RequiredArgsConstructor
 public class UserController {
-    private static final String STATUS = "SUCCESS";
     private final UserService userService;
 
-    @PostMapping("/users/register")
-    public ResponseEntity<APIResponse<UserResponseDTO>> createNewUser(@RequestBody UserRequestDTO userRequestDTO){
-        UserResponseDTO user = userService.createNewUser(userRequestDTO);
-        APIResponse<UserResponseDTO> apiResponse = APIResponse
-                .<UserResponseDTO>builder()
-                .status(STATUS)
-                .results(user)
-                .build();
-        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
-    }
-    @GetMapping("/users")
-    public ResponseEntity<APIResponse<List<UserResponseDTO>>> findAllUsers(){
-        List<UserResponseDTO> users;
-        try {
-            users = userService.findAllUsers();
-        }catch (Exception e){
-            throw new EventServiceBusinessException("Error getting users");
-        }
-        APIResponse<List<UserResponseDTO>> responseAPI = APIResponse
-                .<List<UserResponseDTO>>builder()
-                .status(STATUS)
-                .results(users)
-                .build();
-        return new ResponseEntity<>(responseAPI, HttpStatus.OK);
+    @PostMapping("/register")
+    public ResponseEntity<Response> saveUser(@Valid @RequestBody UserRequest userRequest, HttpServletRequest request){
+        userService.createUser(userRequest.getFirstName(), userRequest.getLastName(), userRequest.getEmail(), userRequest.getPassword());
+
+        return ResponseEntity.created(geUri()).body(getResponse(request, emptyMap(), "Account Created. Check your email to enable your account", HttpStatus.CREATED));
     }
 
-    @GetMapping(name = "/users/{id}")
-    @ResponseStatus(value = HttpStatus.OK, reason = "Successfully")
-    public ResponseEntity<?> getUserById(@PathVariable(name = "id") UUID id){
-        UserResponseDTO userResponseDTO;
-        try {
-            userResponseDTO = userService.findUserById(id);
-        }catch (Exception e){
-            throw new EventServiceBusinessException("Error getting user");
-        }
-        APIResponse<UserResponseDTO> apiResponse = APIResponse
-                .<UserResponseDTO>builder()
-                .status("SUCCESS")
-                .results(userResponseDTO)
-                .build();
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    private URI geUri() {
+        return URI.create("");
     }
 }
